@@ -33,3 +33,44 @@ describe("Escape character extravaganza", () => {
     expect(n.asNameString()).toBe("oss.cs.fau.de#people");
   });
 });
+
+/** extra tests: */
+describe("Basic function tests", () => {
+  it("Insertion at end", () => {
+    let n: Name = new Name(["oss", "cs", "fau"]);
+    n.insert(3, "de");
+    expect(n.asNameString()).toBe("oss.cs.fau.de");
+  });
+});
+
+describe("Getter tests", () => {
+  it("getComponent() test", () => {
+    let n: Name = new Name(["oss", "cs", "fau", "de"]);
+    expect(n.getComponent(1)).toBe("cs");
+  });
+
+  it("getNoComponents() test", () => {
+    let n: Name = new Name(["oss", "cs", "fau", "de"]);
+    expect(n.getNoComponents()).toBe(4);
+  });
+});
+
+describe('Remove test', () => {
+  it('Test with getNoComponents', () => {
+    let n: Name = new Name(["oss", "cs", "fau", "de"]);
+    n.remove(1);
+    expect(n.getNoComponents()).toBe(3);
+  })
+
+  it('Test with equality', () => {
+    let n: Name = new Name(["oss", "cs", "fau", "de"]);
+    n.remove(1);
+    expect(n.asNameString()).toBe("oss.fau.de");
+  })
+
+  it('Test with out of bounds', () => {
+    let n: Name = new Name(["oss", "cs", "fau", "de"]);
+    n.remove(4);
+    expect(n.asNameString()).toBe("oss.cs.fau.de");
+  })
+})
