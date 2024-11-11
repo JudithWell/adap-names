@@ -1,5 +1,5 @@
 export const DEFAULT_DELIMITER: string = '.';
-export const ESCAPE_CHARACTER = '\\';
+export const ESCAPE_CHARACTER = '\\'; // this is a single backslash!
 
 /**
  * A name is a sequence of string components separated by a delimiter character.
