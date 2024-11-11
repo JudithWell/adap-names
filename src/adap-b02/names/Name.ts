@@ -1,3 +1,5 @@
+export const DEFAULT_DELIMITER: string = '.';
+export const ESCAPE_CHARACTER = '\\'; // this is a single backslash!
 import { Printable } from "../common/Printable";
 
 export const DEFAULT_DELIMITER: string = '.';
