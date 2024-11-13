@@ -101,5 +101,4 @@ export class StringArrayName implements Name {
         return s.replace(ESCAPE_CHARACTER + this.delimiter, this.delimiter)
                 .replace(ESCAPE_CHARACTER + ESCAPE_CHARACTER, ESCAPE_CHARACTER);
     }
-
 }
