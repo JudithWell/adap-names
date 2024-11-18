@@ -79,6 +79,16 @@ export class StringName extends AbstractName {
         }
     }
 
+    concat(other: Name): void {
+        if (this.isEmpty()) {
+            this.name = other.asString();
+        } else if (other.isEmpty()) {
+            return;
+        } else {
+            this.name = this.name + this.delimiter + other.asString();
+        }
+    }
+
 
     /** @returns an Array of RegExpMatchArrays, which contain the name components extracted by a regexp. The name component is contained in the first capturing group. */
     protected getComponents(): Array<RegExpMatchArray> {

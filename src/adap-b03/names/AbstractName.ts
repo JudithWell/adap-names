@@ -75,14 +75,14 @@ export abstract class AbstractName implements Name {
         if (!other.isEmpty()) {
             let start = 0;
             if (this.isEmpty()) {
-                console.log(this.asString())
+                // console.log(this.asString())
                 this.setComponent(0, other.getComponent(0));
-                console.log("this is empty, so we set component 0 to " + other.getComponent(0));
+                // console.log("this is empty, so we set component 0 to " + other.getComponent(0));
                 start += 1;
-                console.log(this.asString())
+                // console.log(this.asString())
             }
             for (let i = start; i < other.getNoComponents(); i++) {
-                console.log("Adding " + other.getComponent(i) + "  in loop...")
+                // console.log("Adding " + other.getComponent(i) + "  in loop...")
                 this.append(other.getComponent(i))
             }
         }
