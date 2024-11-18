@@ -1,4 +1,5 @@
-import { Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "./Name";
+import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
+import { Name } from "./Name";
 
 export class StringArrayName implements Name {
     // All components shall be human-readable, thus not having escaped characters.

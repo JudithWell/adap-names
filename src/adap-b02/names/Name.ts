@@ -18,37 +18,28 @@ export const ESCAPE_CHARACTER = '\\'; // this is a single backslash!
 export interface Name extends Printable {
 
     /**
-     * Returns a human-readable representation of the Name instance using user-set control characters
-     * Control characters are not escaped (creating a human-readable string)
-     * Users can vary the delimiter character to be used
+     * Returns true, if number of components == 0; else false
      */
-    asString(delimiter?: string): string;
-
-    /** 
-     * Returns a machine-readable representation of Name instance using default control characters
-     * Machine-readable means that from a data string, a Name can be parsed back in
-     * The control characters in the data string are the default characters
-     */
-    asDataString(): string;
-
     isEmpty(): boolean;
 
-    getDelimiterCharacter(): string;
-
-    /** Returns number of components in Name instance */
+    /** 
+     * Returns number of components in Name instance
+     */
     getNoComponents(): number;
 
     getComponent(i: number): string;
 
-    /** Assumes that new Name component c is properly masked */
+    /** Expects that new Name component c is properly masked */
     setComponent(i: number, c: string): void;
 
-    /** Assumes that new Name component c is properly masked */
+    /** Expects that new Name component c is properly masked */
     insert(i: number, c: string): void;
 
-    /** Assumes that new Name component c is properly masked */
+    /** Expects that new Name component c is properly masked */
     append(c: string): void;
 
     remove(i: number): void;
+    
+    concat(other: Name): void;
     
 }
