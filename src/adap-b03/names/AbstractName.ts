@@ -55,7 +55,7 @@ export abstract class AbstractName implements Name {
 
     public isEmpty(): boolean {
         /* TODO: Does this properly reflect [""] and "" as empty names? */
-        return this.getNoComponents() === 0;
+        return this.getNoComponents() === 1 && this.getComponent(0) === "";
     }
 
     public getDelimiterCharacter(): string {
@@ -72,8 +72,19 @@ export abstract class AbstractName implements Name {
     abstract remove(i: number): void;
 
     public concat(other: Name): void {
-        for (let i = 0; i < other.getNoComponents(); i++) {
-            this.append(other.getComponent(i));
+        if (!other.isEmpty()) {
+            let start = 0;
+            if (this.isEmpty()) {
+                console.log(this.asString())
+                this.setComponent(0, other.getComponent(0));
+                console.log("this is empty, so we set component 0 to " + other.getComponent(0));
+                start += 1;
+                console.log(this.asString())
+            }
+            for (let i = start; i < other.getNoComponents(); i++) {
+                console.log("Adding " + other.getComponent(i) + "  in loop...")
+                this.append(other.getComponent(i))
+            }
         }
     }
 

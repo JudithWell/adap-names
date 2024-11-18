@@ -6,28 +6,36 @@ export class StringArrayName extends AbstractName {
     protected components: string[] = [];
 
     constructor(other: string[], delimiter?: string) {
-        super();
-        throw new Error("needs implementation");
+        if (other.length === 0) {
+            throw new Error("Invalid Argument: array can't be empty!");
+        }
+        
+        super(delimiter);
+        this.components = this.components.concat(other);
     }
 
     getNoComponents(): number {
-        throw new Error("needs implementation");
+        return this.components.length;
     }
 
     getComponent(i: number): string {
-        throw new Error("needs implementation");
+        return this.components[i];
     }
     setComponent(i: number, c: string) {
-        throw new Error("needs implementation");
+        this.components[i] = c;
     }
 
     insert(i: number, c: string) {
-        throw new Error("needs implementation");
+        this.components.splice(i, 0, this.unescapeCharacters(c));
     }
     append(c: string) {
-        throw new Error("needs implementation");
+        this.components.push(c);
     }
     remove(i: number) {
-        throw new Error("needs implementation");
+        if (this.components.length === 0 && i === 0) {
+            this.components[0] = "";
+        } else {
+            this.components.splice(i, 1);
+        }
     }
 }
