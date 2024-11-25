@@ -3,3 +3,5 @@ node_modules
 solution
 .vscode
 .gitattributes
+*-solutions
+*-private

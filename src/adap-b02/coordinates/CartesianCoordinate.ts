@@ -46,10 +46,6 @@ export class CartesianCoordinate implements Coordinate {
         return hashCode;
     }
 
-    public clone(): Coordinate {
-        return new CartesianCoordinate(this.doGetX(), this.doGetY());
-    }
-
     public reset(): void {
         this.initialize(0, 0);
     }

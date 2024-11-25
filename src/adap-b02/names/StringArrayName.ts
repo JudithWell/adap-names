@@ -3,8 +3,8 @@ import { Name } from "./Name";
 
 export class StringArrayName implements Name {
     // All components shall be human-readable, thus not having escaped characters.
-    protected components: string[] = [];
     protected delimiter: string = DEFAULT_DELIMITER;
+    protected components: string[] = [];
 
     constructor(other: string[], delimiter?: string) {
         if (other.length === 0) {

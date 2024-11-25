@@ -46,10 +46,6 @@ export class PolarCoordinate implements Coordinate {
         return hashCode;
     }
 
-    public clone(): Coordinate {
-        return new PolarCoordinate(this.doGetR(), this.doGetPhi());
-    }
-
     public reset(): void {
         this.initialize(0, 0);
     }
