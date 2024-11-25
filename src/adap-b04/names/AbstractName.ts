@@ -3,6 +3,7 @@ import { IllegalArgumentException } from "../common/IllegalArgumentException";
 import { InvalidStateException } from "../common/InvalidStateException";
 import { MethodFailureException } from "../common/MethodFailureException";
 import { Name } from "./Name";
+import { read } from "fs";
 
 export abstract class AbstractName implements Name {
 
@@ -42,11 +43,11 @@ export abstract class AbstractName implements Name {
     }
 
     public asDataString(): string {
-        let components: Array<string> = [];
-        for (let i = 0; i < this.getNoComponents(); i++) {
-            components.push(this.getComponent(i));
+        if (this.getDelimiterCharacter() != DEFAULT_DELIMITER) {
+            return this.asDataStringWithNewDelimiter(this.delimiter, DEFAULT_DELIMITER);
+        } else {
+            return this.getComponents().join(DEFAULT_DELIMITER);
         }
-        return components.join(DEFAULT_DELIMITER);
     }
 
     public isEqual(other: Name): boolean {
@@ -96,10 +97,50 @@ export abstract class AbstractName implements Name {
         }
     }
 
+    /* Way to access components as an array. */
+    protected abstract getComponents(): string[];
+
 
     /* helper functions */
     protected unescapeCharacters(s: string): string {
         return s.replace(ESCAPE_CHARACTER + this.delimiter, this.delimiter)
                 .replace(ESCAPE_CHARACTER + ESCAPE_CHARACTER, ESCAPE_CHARACTER);
+    }
+
+    protected escapeRegExChar(char: string): string {
+        // Replaces the character char with an escaped version of the character for use in regex.
+        return char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    /**
+     * Does four steps:
+     * - Splits the string into components
+     * - unescapes all escaped prevDelimiter occurrences
+     * - escapes all unescaped occurrences of newDelimiter
+     * - joins the components with the new delimiter
+     * @param prevDelimiter 
+     * @param newDelimiter 
+     */
+    protected asDataStringWithNewDelimiter(prevDelimiter: string, newDelimiter: string) {
+        IllegalArgumentException.assertIsSingleCharacter(prevDelimiter);
+        IllegalArgumentException.assertIsSingleCharacter(newDelimiter);
+        IllegalArgumentException.assertCondition(prevDelimiter != newDelimiter, "Same delimiters!")
+
+        /* Step1: Should get all components without delims (capture group1) from the list of matches */
+        const components = this.getComponents();
+
+        /* Step2: Unescape all prevDelims */
+        const unescapedComponents = components.map(component => {
+            /* Group 1 holds all the escaped escape characters */
+            return component.replace(new RegExp(`(?<!\\\\)(\\\\\\\\)*\\\\${this.escapeRegExChar(prevDelimiter)}`, 'g'), `$1${prevDelimiter}`)
+        });
+
+        /* Step3: Reescape newDelims in components */
+        const reescapedComponents = unescapedComponents.map(component => {
+            return component.replace(new RegExp(`(\\\\\\\\)*${this.escapeRegExChar(newDelimiter)}`, 'g'), `$1${ESCAPE_CHARACTER}${newDelimiter}`);
+        });
+
+        /* Step4: Rebuild the name */
+        return reescapedComponents.join(newDelimiter);
     }
 }

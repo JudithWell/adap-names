@@ -223,3 +223,22 @@ describe('Concat', () => {
     expect(n.asString()).toBe("");
   });
 });
+
+
+describe('Extensive DataString Tests', () => {
+  it('StringName with new delimiter', () => {
+    let n: StringName = new StringName("abc#de\\#f#g.hi", '#');
+    expect(n.asDataString()).toBe("abc.de#f.g\\.hi");
+  });
+  it('StringArrayName with new delimiter', () => {
+    let n: StringArrayName = new StringArrayName(["abc", "de\\#f", "g.hi"], '#');
+    expect(n.asDataString()).toBe("abc.de#f.g\\.hi");
+  })
+});
+
+describe('asStringTests', () => {
+  it('StringName', () => {
+    let n = new StringName("a\\\\.bc\\.de");
+    expect(n.asString()).toBe("a\\.bc.de");
+  });
+});

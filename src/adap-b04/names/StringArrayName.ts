@@ -6,7 +6,6 @@ import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
 
 export class StringArrayName extends AbstractName {
-
     protected components: string[] = [];
 
     constructor(other: string[], delimiter?: string) {
@@ -38,7 +37,7 @@ export class StringArrayName extends AbstractName {
     }
 
     public asDataString(): string {
-        return this.components.join(DEFAULT_DELIMITER);
+        return super.asDataString();
     }
 
     public isEqual(other: Name): boolean {
@@ -79,6 +78,10 @@ export class StringArrayName extends AbstractName {
 
         InvalidStateException.assertCondition(this.getNoComponents() === no, "Number of components changed!");
         MethodFailureException.assertCondition(this.components[i] === c, "Failed to set component!");
+    }
+
+    protected getComponents(): string[] {
+        return this.components;
     }
 
     public insert(i: number, c: string) {

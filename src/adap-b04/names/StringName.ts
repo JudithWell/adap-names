@@ -6,7 +6,6 @@ import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
 
 export class StringName extends AbstractName {
-
     protected name: string = "";
     protected noComponents: number = 0;
 
@@ -16,7 +15,7 @@ export class StringName extends AbstractName {
         if (other === "") {
             this.noComponents = 0;
         } else {
-            this.noComponents = this.getComponents().length;
+            this.noComponents = this.getMatches().length;
         }
 
         MethodFailureException.assertCondition(this.noComponents >= 0, "Failed to initialize Name.");
@@ -40,8 +39,11 @@ export class StringName extends AbstractName {
     }
 
     public asDataString(): string {
-        // TODO: Rework!
-        return super.asDataString();
+        if (this.getDelimiterCharacter() != DEFAULT_DELIMITER) {
+            return this.asDataStringWithNewDelimiter(this.delimiter, DEFAULT_DELIMITER);
+        } else {
+            return this.name;
+        }
     }
 
     public isEqual(other: Name): boolean {
@@ -70,14 +72,14 @@ export class StringName extends AbstractName {
         IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
 
         // get group1 text from RegExpMatchArray, which contains the component string
-        return this.getComponents()[i][1];
+        return this.getMatches()[i][1];
     }
 
     public setComponent(i: number, c: string) {
         IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
-        const matches = this.getComponents();
+        const matches = this.getMatches();
         if (matches[i].index === undefined) {
             throw new Error("Index " + i + " not valid!");
         }
@@ -86,7 +88,7 @@ export class StringName extends AbstractName {
 
         this.name = prev + c + post;
 
-        InvalidStateException.assertCondition(this.getComponents().length === no, "Number of components changed!");
+        InvalidStateException.assertCondition(this.getMatches().length === no, "Number of components changed!");
         MethodFailureException.assertCondition(this.getComponent(i) === c, "Failed to set component!");
     }
 
@@ -94,7 +96,7 @@ export class StringName extends AbstractName {
         IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
-        const matches = this.getComponents();
+        const matches = this.getMatches();
         if (matches.length === i) {
             // append
             this.name = this.name + this.delimiter + c;
@@ -131,12 +133,12 @@ export class StringName extends AbstractName {
         IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
-        const matches = this.getComponents();
+        const matches = this.getMatches();
         if (matches[i].index === undefined) {
             throw new Error("Index " + i + " not valid!");
         }
         let start: number;
-        if (i === this.getComponents().length - 1 && matches[i].index - 1 >= 0 ) {
+        if (i === this.getMatches().length - 1 && matches[i].index - 1 >= 0 ) {
             // if last component is removed, make sure that previous delimiter is also deleted, if present
             start = matches[i].index - 1;
         } else {
@@ -169,7 +171,7 @@ export class StringName extends AbstractName {
 
 
     /** @returns an Array of RegExpMatchArrays, which contain the name components extracted by a regexp. The name component is contained in the first capturing group. */
-    protected getComponents(): Array<RegExpMatchArray> {
+    protected getMatches(): Array<RegExpMatchArray> {
         return [...this.name.matchAll(this.getComponentsRegEx(this.delimiter))];
     }
 
@@ -194,37 +196,7 @@ export class StringName extends AbstractName {
         return new RegExp(`(?<=${delim}|^)((?:[^${esc}${delimiter}]|${esc}[${esc}${delimiter}]|${esc}${esc}[^${esc}${delimiter}])*?)(?:${delim}|$)`, 'g');
     }
 
-    /**
-     * Does four steps:
-     * - Splits the string into components
-     * - unescapes all escaped prevDelimiter occurrences
-     * - escapes all unescaped occurrences of newDelimiter
-     * - joins the components with the new delimiter
-     * @param prevDelimiter 
-     * @param newDelimiter 
-     */
-    protected changeDelimiter(prevDelimiter: string, newDelimiter: string) {
-        IllegalArgumentException.assertIsSingleCharacter(prevDelimiter);
-        IllegalArgumentException.assertIsSingleCharacter(newDelimiter);
-
-        /* Step1: Should get all components without delims (capture group1) from the list of matches */
-        const components = this.getComponents().map(match => match[1])
-
-        /* Step2: Unescape all prevDelims */
-        const unescapedComponents = components.map(component => {
-            /* Group 1 holds all the escaped escape characters */
-            return component.replace(new RegExp(`(?<!\\)(\\\\)*\\${this.escapeRegExChar(prevDelimiter)}`, 'g'), `$1${this.escapeRegExChar(prevDelimiter)}`);
-        });
-
-        /* Step3: Reescape newDelims in components */
-        const reescapedComponents = unescapedComponents.map(component => {
-            
-        });
+    protected getComponents(): string[] {
+        return this.getMatches().map(match => match[1]);
     }
-
-    protected escapeRegExChar(char: string): string {
-        // Replaces the character char with an escaped version of the character for use in regex.
-        return char.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-
 }
