@@ -50,6 +50,14 @@ export class Name {
      * The control characters in the data string are the default characters
      */
     public asDataString(): string {
+        // We assume that components are all already properly masked.
+        let nameString = this.components.join(this.delimiter);
+        return nameString;
+    }
+    
+    /** Returns human-readable representation of Name instance */
+    /** @methodtype conversion-method */
+    public asNameString(delimiter: string = this.delimiter): string {
         let nameString = this.components.join(delimiter);
         return nameString;
     }

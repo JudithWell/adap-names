@@ -1,4 +1,6 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import { InvalidStateException } from "../common/InvalidStateException";
 import { Name } from "./Name";
 
 export abstract class AbstractName implements Name {
@@ -6,7 +8,12 @@ export abstract class AbstractName implements Name {
     protected delimiter: string = DEFAULT_DELIMITER;
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
-        throw new Error("needs implementation");
+        IllegalArgumentException.assertIsNotNullOrUndefined(delimiter)
+        IllegalArgumentException.assertIsSingleCharacter(delimiter, "Delimiter needs to be a single character!");
+
+        this.delimiter = delimiter;
+
+        InvalidStateException.assertIsNotNullOrUndefined()
     }
 
     public clone(): Name {
