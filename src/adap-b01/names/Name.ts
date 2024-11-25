@@ -27,12 +27,6 @@ export class Name {
             this.delimiter = delimiter;
         }
     }
-
-    public asNameString(delimiter: string = this.delimiter): string {
-        let nameString = this.components.join(delimiter);
-        return nameString;
-    }
-
     
     /**
      * Returns a human-readable representation of the Name instance using user-set control characters
