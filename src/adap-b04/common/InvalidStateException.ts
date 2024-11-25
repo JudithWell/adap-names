@@ -6,7 +6,7 @@ import { Exception } from "./Exception";
  */
 export class InvalidStateException extends Exception {
 
-    static assertIsIsNotNullOrUndefined(o: Object | null, m: string = "null or undefined", t?: Exception): void {
+    static assertIsNotNullOrUndefined(o: Object | null, m: string = "null or undefined", t?: Exception): void {
         this.assertCondition(!this.isNullOrUndefined(o), m, t);
     }
 
