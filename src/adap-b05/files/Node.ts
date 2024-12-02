@@ -58,7 +58,13 @@ export class Node {
      * @param bn basename of node being searched for
      */
     public findNodes(bn: string): Set<Node> {
-        throw new Error("needs implementation or deletion");
+        /* Base case for Nodes in general and files that just check themselves. */
+        let found: Set<Node> = new Set<Node>();
+        if (this.getBaseName() === bn) {
+            found.add(this);
+        }
+        this.assertClassInvariants();
+        return found;
     }
 
     protected assertClassInvariants(): void {
@@ -70,5 +76,4 @@ export class Node {
         const condition: boolean = (bn != "");
         AssertionDispatcher.dispatch(et, condition, "invalid base name");
     }
-
 }

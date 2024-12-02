@@ -35,4 +35,17 @@ export class Link extends Node {
         const result: Node = this.targetNode as Node;
         return result;
     }
+
+    public findNodes(bn: string): Set<Node> {
+        /* Check the links baseName */
+        let found = super.findNodes(bn);
+        /* Recurse to targetNode */
+        const target = this.ensureTargetNode(this.targetNode);
+        target.findNodes(bn).forEach((node) => {
+            found.add(node);
+        });
+
+        this.assertClassInvariants();
+        return found;
+    }
 }
