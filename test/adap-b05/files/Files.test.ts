@@ -35,7 +35,8 @@ describe("Basic naming test", () => {
   it("test name checking", () => {
     let fs: RootNode = createFileSystem();
     let ls: Node = [...fs.findNodes("ls")][0];
-    expect(ls.getFullName().isEqual(new StringName("/usr/bin/ls", '/')));
+    console.log(ls.getFullName());
+    expect(ls.getFullName().isEqual(new StringName("/usr/bin/ls", '/'))).toBe(true);
   });
 });
 
@@ -67,11 +68,11 @@ describe("Buggy setup test", () => {
     } catch(er) {
       threwException = true;
       let ex: Exception = er as Exception;
-      expect(ex instanceof ServiceFailureException);
-      expect(ex.hasTrigger());
+      expect(ex instanceof ServiceFailureException).toBe(true);
+      expect(ex.hasTrigger()).toBe(true);
       let tx: Exception = ex.getTrigger();
-      expect(tx instanceof InvalidStateException);
+      expect(tx instanceof InvalidStateException).toBe(true);
     }
-    expect(threwException);
+    expect(threwException).toBe(true);
   });
 });

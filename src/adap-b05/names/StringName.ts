@@ -145,7 +145,9 @@ export class StringName extends AbstractName {
         let no = this.getNoComponents();
 
         if (this.isEmpty()) {
-            this.name = c;
+            // this.name = c;
+            /* @todo find a consistent way to handle single component not quite empty names */
+            this.name = this.delimiter + c;
         } else {
             this.name = this.name + this.delimiter + c;
         }
