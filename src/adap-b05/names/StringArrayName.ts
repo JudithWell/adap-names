@@ -77,6 +77,10 @@ export class StringArrayName extends AbstractName {
             0 <= i && i < this.getNoComponents(),
             "Component index out of bounds!"
         );
+        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+            this.isProperlyMasked(c),
+            "new component is not properly masked!"
+        );
         let no = this.getNoComponents();
 
         this.components[i] = c;
@@ -97,6 +101,10 @@ export class StringArrayName extends AbstractName {
         AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
+        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+            this.isProperlyMasked(c),
+            "new component is not properly masked!"
+        );
         let no = this.getNoComponents();
         let prev = this.components[i];
 
@@ -114,6 +122,10 @@ export class StringArrayName extends AbstractName {
     }
 
     public append(c: string) {
+        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+            this.isProperlyMasked(c),
+            "new component is not properly masked!"
+        );
         let no = this.getNoComponents();
 
         if (this.isEmpty()) {
@@ -149,6 +161,10 @@ export class StringArrayName extends AbstractName {
     }
 
     public concat(other: Name): void {
+        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+            other != null && other != undefined,
+            "other is not defined or null!"
+        );
         let no = this.getNoComponents() + other.getNoComponents();
 
         super.concat(other);
