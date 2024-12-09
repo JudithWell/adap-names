@@ -14,6 +14,7 @@ export class File extends Node {
 
     constructor(baseName: string, parent: Directory) {
         super(baseName, parent);
+        // console.log("Added File with name: " + this.getFullName().asString());
     }
 
     public open(): void {

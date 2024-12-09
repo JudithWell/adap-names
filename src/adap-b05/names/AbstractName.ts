@@ -1,5 +1,6 @@
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import { MethodFailedException } from "../common/MethodFailedException";
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { AssertionDispatcher, ExceptionType } from "../common/AssertionDispatcher";
 import { Name } from "./Name";
 
 export abstract class AbstractName implements Name {
@@ -7,18 +8,18 @@ export abstract class AbstractName implements Name {
     protected delimiter: string = DEFAULT_DELIMITER;
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, 
+        IllegalArgumentException.assert(
             delimiter != undefined && delimiter != null,
             "delimiter was undefined or null!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             delimiter.length == 1,
             "delimiter is required to have length 1!"
         );
         
         this.delimiter = delimiter;
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.delimiter != undefined && this.delimiter != null,
             "failed to initialize delimiter"
         );
@@ -28,7 +29,7 @@ export abstract class AbstractName implements Name {
         /* creates a new object with references to this' attributes */ 
         let copy: Name = {...this};
         
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.isEqual(copy),
             "Clone is not equal to original"
         );
@@ -36,7 +37,7 @@ export abstract class AbstractName implements Name {
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             delimiter != null && delimiter.length == 1,
             "delimiter is required to have length 1!"
         );
@@ -87,7 +88,7 @@ export abstract class AbstractName implements Name {
     public getDelimiterCharacter(): string {
         let c = this.delimiter;
         
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             c != null && c.length == 1,
             "delimiter has invalid state!"
         );
@@ -113,7 +114,7 @@ export abstract class AbstractName implements Name {
             }
         }
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getNoComponents() === thisLength + otherLength
         );
     }
@@ -146,11 +147,11 @@ export abstract class AbstractName implements Name {
      * @param newDelimiter 
      */
     protected asDataStringWithNewDelimiter(prevDelimiter: string, newDelimiter: string) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             prevDelimiter != null && newDelimiter != null,
             "Delimiter arguments must be non-null!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             prevDelimiter.length === 1 && newDelimiter.length === 1 && prevDelimiter != newDelimiter,
             "Delimiters need to be single characters and different!"
         );

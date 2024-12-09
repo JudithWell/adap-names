@@ -9,6 +9,7 @@ export class Directory extends Node {
 
     constructor(bn: string, pn: Directory) {
         super(bn, pn);
+        // console.log("Added Directory with name: " + this.getFullName().asString());
     }
 
     public hasChildNode(cn: Node): boolean {

@@ -124,7 +124,7 @@ export abstract class AbstractName implements Name {
     protected asDataStringWithNewDelimiter(prevDelimiter: string, newDelimiter: string) {
         IllegalArgumentException.assertIsSingleCharacter(prevDelimiter);
         IllegalArgumentException.assertIsSingleCharacter(newDelimiter);
-        IllegalArgumentException.assertCondition(prevDelimiter != newDelimiter, "Same delimiters!")
+        IllegalArgumentException.assert(prevDelimiter != newDelimiter, "Same delimiters!")
 
         /* Step1: Should get all components without delims (capture group1) from the list of matches */
         const components = this.getComponents();

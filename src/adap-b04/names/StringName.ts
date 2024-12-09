@@ -18,7 +18,7 @@ export class StringName extends AbstractName {
             this.noComponents = this.getMatches().length;
         }
 
-        MethodFailureException.assertCondition(this.noComponents >= 0, "Failed to initialize Name.");
+        MethodFailureException.assert(this.noComponents >= 0, "Failed to initialize Name.");
         MethodFailureException.assertIsNotNullOrUndefined(this.name);
     }
 
@@ -63,20 +63,20 @@ export class StringName extends AbstractName {
     }
 
     public getNoComponents(): number {
-        InvalidStateException.assertCondition(this.noComponents >= 0, "Something went very wrong and there is a negative noComponents!");
+        InvalidStateException.assert(this.noComponents >= 0, "Something went very wrong and there is a negative noComponents!");
 
         return this.noComponents;
     }
 
     public getComponent(i: number): string {
-        IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
+        IllegalArgumentException.assert(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
 
         // get group1 text from RegExpMatchArray, which contains the component string
         return this.getMatches()[i][1];
     }
 
     public setComponent(i: number, c: string) {
-        IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
+        IllegalArgumentException.assert(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
         const matches = this.getMatches();
@@ -88,12 +88,12 @@ export class StringName extends AbstractName {
 
         this.name = prev + c + post;
 
-        InvalidStateException.assertCondition(this.getMatches().length === no, "Number of components changed!");
-        MethodFailureException.assertCondition(this.getComponent(i) === c, "Failed to set component!");
+        InvalidStateException.assert(this.getMatches().length === no, "Number of components changed!");
+        MethodFailureException.assert(this.getComponent(i) === c, "Failed to set component!");
     }
 
     public insert(i: number, c: string) {
-        IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
+        IllegalArgumentException.assert(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
         const matches = this.getMatches();
@@ -111,8 +111,8 @@ export class StringName extends AbstractName {
         }
         this.noComponents++;
 
-        MethodFailureException.assertCondition(this.getNoComponents() === no + 1, "Number of components did not increase!");
-        MethodFailureException.assertCondition(this.getComponent(i) === c, "Failed to insert component!");
+        MethodFailureException.assert(this.getNoComponents() === no + 1, "Number of components did not increase!");
+        MethodFailureException.assert(this.getComponent(i) === c, "Failed to insert component!");
     }
 
     public append(c: string) {
@@ -126,11 +126,11 @@ export class StringName extends AbstractName {
         this.noComponents++;
 
 
-        MethodFailureException.assertCondition(this.getNoComponents() === no + 1, "Number of components did not increase!");
+        MethodFailureException.assert(this.getNoComponents() === no + 1, "Number of components did not increase!");
     }
 
     public remove(i: number) {
-        IllegalArgumentException.assertCondition(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
+        IllegalArgumentException.assert(0 <= i && i < this.getNoComponents(), "Component index out of bounds!");
         let no = this.getNoComponents();
 
         const matches = this.getMatches();
@@ -150,7 +150,7 @@ export class StringName extends AbstractName {
 
         this.noComponents--;
 
-        InvalidStateException.assertCondition(this.getNoComponents() === no - 1, "Number of components did not decrease!");
+        InvalidStateException.assert(this.getNoComponents() === no - 1, "Number of components did not decrease!");
     }
 
     public concat(other: Name): void {
@@ -166,7 +166,7 @@ export class StringName extends AbstractName {
             this.noComponents += other.getNoComponents();
         }
 
-        MethodFailureException.assertCondition(this.getNoComponents() === no, "Concatenation failed to result in the correct number of Elements!");
+        MethodFailureException.assert(this.getNoComponents() === no, "Concatenation failed to result in the correct number of Elements!");
     }
 
 

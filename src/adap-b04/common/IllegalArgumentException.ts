@@ -8,7 +8,7 @@ import { InvalidStateException } from "./InvalidStateException";
 export class IllegalArgumentException extends Exception {
 
     static assertIsNotNullOrUndefined(o: Object | null, m: string = "null or undefined", t?: Exception): void {
-        this.assert(!this.isNullOrUndefined(o), m);
+        this.assert(o != null && o != undefined, m);
     }
 
     static assertIsSingleCharacter(c: String, exMsg: string = "string is not a single character"): void {

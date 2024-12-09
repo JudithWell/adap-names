@@ -7,7 +7,7 @@ import { Exception } from "./Exception";
 export class InvalidStateException extends Exception {
 
     static assertIsNotNullOrUndefined(o: Object | null, m: string = "null or undefined", t?: Exception): void {
-        this.assert(!this.isNullOrUndefined(o), m, t);
+        this.assert(o != null && o != undefined, m, t);
     }
 
     static assertIsSingleCharacter(c: String, exMsg: string = "string is not a single character"): void {

@@ -1,8 +1,10 @@
 import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { AssertionDispatcher, ExceptionType } from "../common/AssertionDispatcher";
 import { Name } from "./Name";
 import { AbstractName } from "./AbstractName";
 import { exec } from "child_process";
+import { MethodFailedException } from "../common/MethodFailedException";
+import { InvalidStateException } from "../common/InvalidStateException";
+import { IllegalArgumentException } from "../common/IllegalArgumentException";
 
 export class StringName extends AbstractName {
 
@@ -18,7 +20,7 @@ export class StringName extends AbstractName {
             this.noComponents = this.getMatches().length;
         }
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.name != null && this.noComponents >= 0,
             "Failed to initialize Name."
         );
@@ -28,7 +30,7 @@ export class StringName extends AbstractName {
         /* creates a new object with references to this' attributes */ 
         let copy: Name = new StringName(this.name);
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.isEqual(copy),
             "Clone is not equal to original"
         );
@@ -64,7 +66,7 @@ export class StringName extends AbstractName {
     }
 
     public getNoComponents(): number {
-        AssertionDispatcher.dispatch(ExceptionType.CLASS_INVARIANT,
+        InvalidStateException.assert(
             this.noComponents >= 0, "Something went very wrong and there is a negative noComponents!"
         );
 
@@ -72,7 +74,7 @@ export class StringName extends AbstractName {
     }
 
     public getComponent(i: number): string {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
 
@@ -81,10 +83,10 @@ export class StringName extends AbstractName {
     }
 
     public setComponent(i: number, c: string) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             this.isProperlyMasked(c), "new component string is not properly masked!"
         );
         let no = this.getNoComponents();
@@ -98,19 +100,19 @@ export class StringName extends AbstractName {
 
         this.name = prev + c + post;
 
-        AssertionDispatcher.dispatch(ExceptionType.CLASS_INVARIANT,
+        InvalidStateException.assert(
             this.getMatches().length === no, "Number of components changed!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getComponent(i) === c, "Failed to set component!"
         );
     }
 
     public insert(i: number, c: string) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             this.isProperlyMasked(c), "new component string is not properly masked!"
         );
         let no = this.getNoComponents();
@@ -130,16 +132,16 @@ export class StringName extends AbstractName {
         }
         this.noComponents++;
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getNoComponents() === no + 1, "Number of components did not increase!"
         );
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getComponent(i) === c, "Failed to insert component!"
         );
     }
 
     public append(c: string) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             this.isProperlyMasked(c), "new component string is not properly masked!"
         );
         let no = this.getNoComponents();
@@ -153,13 +155,13 @@ export class StringName extends AbstractName {
         }
         this.noComponents++;
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getNoComponents() === no + 1, "Number of components did not increase!"
         );
     }
 
     public remove(i: number) {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION,
+        IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
         let no = this.getNoComponents();
@@ -181,7 +183,7 @@ export class StringName extends AbstractName {
 
         this.noComponents--;
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getNoComponents() === no - 1, "Number of components did not decrease!"
         );
     }
@@ -199,7 +201,7 @@ export class StringName extends AbstractName {
             this.noComponents += other.getNoComponents();
         }
 
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        MethodFailedException.assert(
             this.getNoComponents() === no, "Concatenation failed to result in the correct number of Elements!"
         );
     }

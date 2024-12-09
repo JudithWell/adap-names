@@ -13,6 +13,7 @@ export class Node {
         this.doSetBaseName(bn);
         this.parentNode = pn; // why oh why do I have to set this
         this.initialize(pn);
+        console.log("Added Node "+ this.getBaseName() +"");
     }
 
     protected initialize(pn: Directory): void {
@@ -68,11 +69,11 @@ export class Node {
 
     protected assertClassInvariants(): void {
         const bn: string = this.doGetBaseName();
-        this.assertIsValidBaseName(bn, ExceptionType.CLASS_INVARIANT);
+        const pn: string = this.getParentNode().doGetBaseName();
+        InvalidStateException.assert(this.isValidBaseName(bn), "invalid base name: " + bn + "child of " + pn);
     }
 
-    protected assertIsValidBaseName(bn: string, et: ExceptionType): void {
-        const condition: boolean = (bn != "");
-        AssertionDispatcher.dispatch(et, condition, "invalid base name");
+    protected isValidBaseName(bn: string): boolean {
+        return bn != "";
     }
 }
