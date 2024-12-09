@@ -74,7 +74,7 @@ export class StringArrayName extends AbstractName {
         return this.components[i];
     }
 
-    public setComponent(i: number, c: string) {
+    public setComponent(i: number, c: string): Name {
         IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(),
             "Component index out of bounds!"
@@ -84,22 +84,28 @@ export class StringArrayName extends AbstractName {
             "new component is not properly masked!"
         );
         let no = this.getNoComponents();
-
-        this.components[i] = c;
+        
+        let newComponents: string[] = [];
+        this.components.forEach(component => {
+            newComponents.push(component);
+        });
+        newComponents[i] = c;
+        let newName = new StringArrayName(newComponents, this.getDelimiterCharacter());
 
         InvalidStateException.assert(
-            this.getNoComponents() === no, "Number of components changed!"
+            newName.getNoComponents() === no, "Number of components changed!"
         );
         MethodFailedException.assert(
-            this.components[i] === c, "Failed to set component!"
+            newName.components[i] === c, "Failed to set component!"
         );
+        return newName;
     }
 
-    protected getComponents(): string[] {
+    protected getComponentsAsArray(): string[] {
         return this.components;
     }
 
-    public insert(i: number, c: string) {
+    public insert(i: number, c: string): Name {
         IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
@@ -110,70 +116,86 @@ export class StringArrayName extends AbstractName {
         let no = this.getNoComponents();
         let prev = this.components[i];
 
-        this.components.splice(i, 0, c);
+        let newComponents: string[] = [];
+        this.components.forEach(component => {
+            newComponents.push(component);
+        });
+        newComponents.splice(i, 0, c);
+        let newName: Name = new StringArrayName(newComponents, this.getDelimiterCharacter());
 
         MethodFailedException.assert(
-            this.getNoComponents() === no + 1, "Number of components did not increase!"
+            newName.getNoComponents() === no + 1, "Number of components did not increase!"
         );
         MethodFailedException.assert(
-            this.components[i] === c, "Failed to insert component!"
+            newName.getComponent(i) === c, "Failed to insert component!"
         );
         MethodFailedException.assert(
-            this.components[i+1] === prev, "Failed to shift previous element properly!"
+            newName.getComponent(i+1) === prev, "Failed to shift previous element properly!"
         );
+        return newName;
     }
 
-    public append(c: string) {
+    public append(c: string): Name {
         IllegalArgumentException.assert(
             this.isProperlyMasked(c),
             "new component is not properly masked!"
         );
         let no = this.getNoComponents();
 
+        let newComponents: string[] = [];
+        this.components.forEach(component => {
+            newComponents.push(component);
+        });
         if (this.isEmpty()) {
-            this.components[0] = c;
+            newComponents[0] = c;
         } else {
-            this.components.push(c);
+            newComponents.push(c);
         }
+        let newName: Name = new StringArrayName(newComponents, this.getDelimiterCharacter());
 
         MethodFailedException.assert(
-            this.getNoComponents() === no + 1, "Number of components did not increase!"
+            newName.getNoComponents() === no + 1, "Number of components did not increase!"
         );
+        return newName;
     }
 
-    public remove(i: number) {
+    public remove(i: number): Name {
         IllegalArgumentException.assert(
             0 <= i && i < this.getNoComponents(), "Component index out of bounds!"
         );
         
         let no = this.getNoComponents();
         
-        if (this.components.length === 0 && i === 0) {
-            this.components[0] = "";
+        let newComponents: string[] = [];
+        this.components.forEach(component => {
+            newComponents.push(component);
+        });
+        if (newComponents.length === 0 && i === 0) {
+            newComponents[0] = "";
         } else {
-            this.components.splice(i, 1);
+            newComponents.splice(i, 1);
         }
+        let newName: Name = new StringArrayName(newComponents, this.getDelimiterCharacter());
 
         InvalidStateException.assert(
-            this.components.length >= 1, "Accidentally emptied entire array!"
+            newName.getNoComponents() === no - 1, "Number of components did not decrease!"
         );
-        InvalidStateException.assert(
-            this.getNoComponents() === no - 1, "Number of components did not decrease!"
-        );
+        return newName;
     }
 
-    public concat(other: Name): void {
+    public concat(other: Name): Name {
         IllegalArgumentException.assert(
             other != null && other != undefined,
             "other is not defined or null!"
         );
         let no = this.getNoComponents() + other.getNoComponents();
 
-        super.concat(other);
+        let newName = super.concat(other);
 
         MethodFailedException.assert(
-            this.getNoComponents() === no, 
+            newName.getNoComponents() === no, 
             "Concatenation failed to result in the correct number of Elements!"
         );
+        return newName;
     }
 }

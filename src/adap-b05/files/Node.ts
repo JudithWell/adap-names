@@ -13,7 +13,6 @@ export class Node {
         this.doSetBaseName(bn);
         this.parentNode = pn; // why oh why do I have to set this
         this.initialize(pn);
-        console.log("Added Node "+ this.getBaseName() +"");
     }
 
     protected initialize(pn: Directory): void {
