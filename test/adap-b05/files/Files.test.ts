@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
 
+import { Exception } from "../../../src/adap-b05/common/Exception";
+import { InvalidStateException } from "../../../src/adap-b05/common/InvalidStateException";
+import { ServiceFailureException } from "../../../src/adap-b05/common/ServiceFailureException";
+
 import { StringName } from "../../../src/adap-b05/names/StringName";
 
 import { Node } from "../../../src/adap-b05/files/Node";
@@ -68,10 +72,10 @@ describe("Buggy setup test", () => {
     } catch(er) {
       threwException = true;
       let ex: Exception = er as Exception;
-      expect(ex instanceof ServiceFailureException).toBe(true);
+      expect(ex).toBeInstanceOf(ServiceFailureException);
       expect(ex.hasTrigger()).toBe(true);
       let tx: Exception = ex.getTrigger();
-      expect(tx instanceof InvalidStateException).toBe(true);
+      expect(tx).toBeInstanceOf(InvalidStateException);
     }
     expect(threwException).toBe(true);
   });

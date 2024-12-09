@@ -7,12 +7,12 @@ export class StringArrayName extends AbstractName {
 
     protected components: string[] = [];
 
-    constructor(other: string[], delimiter?: string) {
+    constructor(source: string[], delimiter?: string) {
         super(delimiter);
-        if (other.length === 0) {   
+        if (source.length === 0) {   
             this.components = [""];
         } else {
-            this.components = this.components.concat(other);
+            this.components = this.components.concat(source);
         }
 
         AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
